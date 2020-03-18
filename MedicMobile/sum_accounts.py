@@ -6,6 +6,7 @@ python sum_accounts.py -h
 
 Example of usage:
 python sum_accounts.py -csv test\billing.csv
+Get-Content .\test\billing.csv | python sum_accounts.py
 
 To run test, pytest and mock libraries have been used:
 python -m pytest ./
@@ -43,7 +44,6 @@ python -m pytest ./
 #
 # Your job is to create a unix-friendly command line application that performs this summarizing efficiently and correctly.
 
-
 import csv
 import sys
 import argparse
@@ -51,12 +51,13 @@ from collections import defaultdict
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(add_help="This script will traverse a given CSV file of format:\nA,B,C\n "
-                                              "where A owes the amount C to B.")
-    parser.add_argument('-csv', '--csv_file', required=True,
-                        help='Path to the CSV file to process.')
-    parser.add_argument('-o', '--output', default='output.csv',
-                        help='Output file, by default ./output.csv is used.')
+    parser = argparse.ArgumentParser(add_help="This script will traverse the given data (by file or standard input) of "
+                                              "format:\nA,B,C\n where A owes the amount C to B, and report the only the"
+                                              "outstanding balances to either a file or standard output.")
+    parser.add_argument('-csv', '--csv_file', default=None,
+                        help='Path to the CSV file to process, by default standard input is used.')
+    parser.add_argument('-o', '--output', default=None,
+                        help='Output file, by default standard output is used.')
     parser.add_argument('-R', '--resolve_pairs', action='store_true', default=False,
                         help='Resolve pairs of accounts (A owes B and B owes A) to only show the one.')
     parser.add_argument('-rd', '--round_digits', default=2, type=int,
@@ -65,16 +66,20 @@ def parse_arguments():
 
 
 def read_line(file_name: str):
-    """Generator reading the given file line per line.
+    """Generator reading the given file line per line, if no file_name is given it defaults to standard input.
 
     Args:
-        file_name(str): path to the text file to read
+        file_name(str): path to the text file to read or None to read from standard input
 
     Returns: yields one line per call till EOF
 
     """
-    with open(file_name, newline='') as FH:
-        for row in csv.reader(FH):
+    if file_name:
+        with open(file_name, newline='') as FH:
+            for row in csv.reader(FH):
+                yield row
+    else:
+        for row in csv.reader(sys.stdin):
             yield row
 
 
@@ -95,7 +100,7 @@ def reverse_negatives(accounts: dict):
 
 
 def write_csv(accounts: dict, outfile: str, round_digits: int):
-    """ Write the account dictionary in in CSV format in to the outfile.
+    """ Write the account dictionary in in CSV format in to the outfile or standard output if outfile is not given.
 
     Args:
         accounts(dict): dictionary of format {('A', 'B'): <float>}
@@ -103,11 +108,17 @@ def write_csv(accounts: dict, outfile: str, round_digits: int):
         round_digits(int): set the rounding to improve readability of the CSV file
 
     """
-    with open(outfile, 'w', newline='') as FH:
-        csv_writer = csv.writer(FH)
+    def write_rows_for_accounts(writer):
         for key, value in accounts.items():
             payee, benefactor = key
-            csv_writer.writerow([payee, benefactor, round(value, ndigits=round_digits)])
+            writer.writerow([payee, benefactor, round(value, ndigits=round_digits)])
+
+    if outfile:
+        with open(outfile, 'w', newline='') as FH:
+            write_rows_for_accounts(csv.writer(FH))
+    else:
+        write_rows_for_accounts(csv.writer(sys.stdout))
+
 
 
 def sum_accounts(csv_file: str, output: str, resolve_pairs=False, round_digits=2):
@@ -123,12 +134,24 @@ def sum_accounts(csv_file: str, output: str, resolve_pairs=False, round_digits=2
     Returns(int): 0
 
     """
+
     accounts = defaultdict(int)
-    for payee, benefactor, amount in read_line(csv_file):
+    for row in read_line(csv_file):
+        try:
+            payee, benefactor, amount = row
+        except ValueError:
+            sys.stderr.write(
+                f'Error: Unrecognized input format. Expected format: "Name1,Name2,Float", received: "{row}"')
+            return 1
+        try:
+            amount = float(amount)
+        except ValueError:
+            sys.stderr.write(f'Error: Unable to convert to Float the received input value: "{amount}"')
+            return 1
         if resolve_pairs and (benefactor, payee) in accounts.keys():
-            accounts[(benefactor, payee)] -= float(amount)
+            accounts[(benefactor, payee)] -= amount
         else:
-            accounts[(payee, benefactor)] += float(amount)
+            accounts[(payee, benefactor)] += amount
 
     accounts = reverse_negatives(accounts) if resolve_pairs else accounts
     write_csv(accounts, output, round_digits)
