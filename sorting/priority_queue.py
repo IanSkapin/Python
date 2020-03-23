@@ -13,6 +13,7 @@ MAX = 'maximum'
 
 
 class UnorderedPQ:
+    # TODO documentation
     __slots__ = 'queue', 'mode'
 
     def __init__(self, mode=MAX):
@@ -41,6 +42,7 @@ class OrderedPQ:
 
 
 class BinaryHeapList(list):
+    # TODO documentation
     def __getitem__(self, item):
         return super().__getitem__(item - 1)
 
@@ -49,6 +51,7 @@ class BinaryHeapList(list):
 
 
 class BinaryHeap:
+    # TODO documentation
     def __init__(self, mode=MAX):
         self.queue = BinaryHeapList()
         self.mode = mode

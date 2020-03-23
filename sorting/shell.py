@@ -1,3 +1,16 @@
+""" Shell-Sort
+
+is NOT STABLE and INPLACE sort
+
+Complexity:
+
+Worst   |   Average   |   Best
+----------------------------------
+ ?      |  ? ( < N^2) |    N
+
+
+Move entries more than one position at a time
+"""
 from . import exchange
 
 

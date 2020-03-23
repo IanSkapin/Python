@@ -1,3 +1,21 @@
+""" Merge-Sort
+
+is a STABLE sort
+
+Complexity:
+
+Worst   |   Average   |   Best
+----------------------------------
+N lg N  |   N lg N    |   N lg N
+
+
+available functions   |   characteristics
+-------------------------------------------
+sort                  | requires N additional space
+sort_no_copy          | still requires N additional space, but there is less element copying
+sort_bottom_up        | slightly slower, but there is no recursion
+
+"""
 from . import insertion
 
 
