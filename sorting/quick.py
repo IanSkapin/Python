@@ -1,5 +1,10 @@
 """ Quick sort and Quick-select
-### Quick sort
+### Quick sort ###
+
+INPLACE and NOT STABLE
+
+   Worst   |   Average   |   Best
+ ~ N^2/2     ~ 2N ln N     ~ N lg N
 
 Algorithm:
     Repeat until i and j pointers cross.
@@ -10,7 +15,8 @@ Algorithm:
     When pointers cross.
     ・ Exchange a[lo] with a[j] .
 
-### Quick-select
+
+### Quick-select ###
 Get the N-th item by size from the randomized list
 
 Algorithm:
@@ -74,9 +80,7 @@ def __sort__(a: list, lo: int, hi: int, cutoff=None):
     __sort__(a, j + 1, hi, cutoff)
 
 
-
-
-### Quick-select
+# ## Quick-select ##
 def select(a: list, k: int):
     random.shuffle(a)
     lo = 0
