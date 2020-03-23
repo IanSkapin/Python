@@ -132,7 +132,7 @@ class Cut:
         return self.player
 
 
-def squareBoard(board):
+def who_wins_on_board(board):
     stage = Stage([binary_board(board)])
     game = Cut(stage, P1)
     game()

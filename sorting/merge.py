@@ -2,8 +2,8 @@ from . import insertion
 
 
 def merge(a: list, aux: list, lo: int, mid: int, hi: int):
-    #assert isSorted(a, lo, mid); // precondition: a[lo..mid] sorted
-    #assert isSorted(a, mid+1, hi); // precondition: a[mid+1..hi] sorted
+    # assert isSorted(a, lo, mid); // precondition: a[lo..mid] sorted
+    # assert isSorted(a, mid+1, hi); // precondition: a[mid+1..hi] sorted
     aux[lo:hi+1] = a[lo:hi+1]
 
     i = lo
@@ -22,7 +22,7 @@ def merge(a: list, aux: list, lo: int, mid: int, hi: int):
             a[k] = aux[i]
             i += 1
 
-    #assert isSorted(a, lo, hi); // postcondition: a[lo..hi] sorted
+    # assert isSorted(a, lo, hi); // postcondition: a[lo..hi] sorted
 
 
 def __sort__(a: list, aux: list, lo: int, hi: int, cutoff=None):
@@ -50,8 +50,14 @@ def sort(a: list):
     __sort__(a, aux, 0, len(a) - 1, cutoff=20)
 
 
+# ## Time optimized
 # Eliminate the copy to the auxiliary array. Save time (but not space)
 # by switching the role of the input and auxiliary array in each recursive call.
+def sort_no_copy(a: list):
+    aux = a[:]
+    sort_aux_to_a(aux, a, 0, len(a) - 1)
+
+
 def merge_a_to_aux(a: list, aux: list, lo: int, mid: int, hi: int):
     i = lo
     j = mid + 1
@@ -83,8 +89,7 @@ def sort_aux_to_a(a: list, aux: list, lo: int, hi: int):
     merge_a_to_aux(a, aux, lo, mid, hi)
 
 
-
-### Bottom Up Merge Sort
+# ## Bottom Up Merge Sort
 # 10% slower than the recursive
 def sort_bottom_up(a: list):
     aux = [0 for _ in range(len(a))]

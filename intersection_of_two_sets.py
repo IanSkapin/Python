@@ -3,27 +3,21 @@ Given two arrays a[] and b[], each containing n distinct 2D points in the plane,
 count the number of points that are contained both in array a[] and array b[].
 """
 from sorting.shell import sort
-from BinarySearch import search
+from binary_search import search
+from functools import total_ordering
 
 
+@total_ordering
 class Point2D:
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
     def __lt__(self, other):
-        return self.__cmp__(other) < 0
+        return self.x < other.x or self.x == other.x and self.y < other.y
 
-    def __cmp__(self, other):
-        if self.x < other.x:
-            return -1
-        if self.x > other.x:
-            return 1
-        if self.y < other.y:
-            return -1
-        if self.y > other.y:
-            return 1
-        return 0
+    def __eq__(self, other):
+        return self.x == other.x and self.y == other.y
 
     def __str__(self):
         return f'P({self.x}, {self.y})'

@@ -15,6 +15,8 @@ Hints:
 """
 from random import randint
 from collections import deque
+import binary_search
+
 
 def generate_bitonic_array(length, max_step=10):
     length = length if length > 2 else 3
@@ -37,25 +39,7 @@ def is_in_bitonic_array(integer, array, debug=False):
         return round((low + high) / 2)
 
     def search(low, high, descending=False):
-        if high < low:
-            if debug:
-                print('dead end')
-            return False
-        mid = get_mid(low, high)
-        if debug:
-            print(f'{low}:{mid}:{high} ', 'descending' if descending else 'ascending')
-        if array[mid] < integer:
-            if descending:
-                return search(descending=descending, low=low,     high=mid - 1)
-            else:
-                return search(descending=descending, low=mid + 1, high=high)
-        elif integer < array[mid]:
-            if descending:
-                return search(descending=descending, low=mid + 1, high=high)
-            else:
-                return search(descending=descending, low=low,     high=mid - 1)
-        else:
-            return mid
+        return binary_search.search(array, integer, low, high, descending, debug)
 
     def max(low, high, local_max=0):
         if low > high:
@@ -88,6 +72,7 @@ def is_in_bitonic_array(integer, array, debug=False):
     if (match := search(array_max + 1, len(array) - 1, descending=True)) is not False:
         return match
     return False
+
 
 if __name__ == '__main__':
    if True:

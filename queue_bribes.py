@@ -1,5 +1,13 @@
+"""
+Given an queue where the names of the people in it are their initial position in the queue. Returning after a while and
+finding their order has changed. Write a function to return the number of bribes that took place where:
+ - a person can only bribe the person in front, and
+ - a person can only bribe twice.
+ If the state we find them at brakes the second rule return  "Too chaotic"
+"""
 
-def minimumBribes(q):
+
+def minimum_bribes(q):
     bribes = [0 for _ in range(len(q))]
     ordered = 0
 

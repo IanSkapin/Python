@@ -6,19 +6,19 @@ friendship is an equivalence relation. The running time of your algorithm should
 use extra space proportional to N.
 """
 
-import UnionFind
+import union_find
 
 N = 10
 
 
-
-class SoNet(UnionFind.WeightedQuickUnion):
+class SoNet(union_find.WeightedQuickUnion):
     def all_connected(self):
         return len(self.connections) == self.connections.count(self.connections[0])
 
+
 sn = SoNet(N)
 
-for entry in UnionFind.random_time_union_genrator(N, N * N):
+for entry in union_find.random_time_union_genrator(N, N * N):
     t, a, b = entry
     sn.union(a, b)
     # print(f'{a} <=> {b} : {sn.connections}')

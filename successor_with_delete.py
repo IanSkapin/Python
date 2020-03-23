@@ -6,8 +6,8 @@ Given a set of nnn integers S={0,1,...,n−1} and a sequence of requests of the 
 
 design a data type so that all operations (except construction) take logarithmic time or better in the worst case.
 """
-from UnionFindSpecificCanonicalElement import CanonicalUnionFind
-from UnionFind import random_time_union_generator, WeightedQuickUnion
+from union_find_specific_canonical_element import CanonicalUnionFind
+from union_find import random_time_union_generator
 
 
 class Successor(CanonicalUnionFind):
@@ -23,6 +23,7 @@ class Successor(CanonicalUnionFind):
         if group_max == self.root(group_max):
             return group_max
         return self.find(group_max + 1)
+
 
 N = 10
 s = Successor(N)

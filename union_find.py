@@ -1,6 +1,7 @@
 
 from random import randint
 
+
 class QuickFind:
     """ complexity:
     initialize  -> N

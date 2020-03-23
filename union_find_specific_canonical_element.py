@@ -6,11 +6,11 @@ For example, if one of the connected components is {1, 2, 6, 9}, then the find()
 return 9 for each of the four elements in the connected components.
 """
 
-import UnionFind
+import union_find
 
 
 
-class CanonicalUnionFind(UnionFind.WeightedQuickUnion):
+class CanonicalUnionFind(union_find.WeightedQuickUnion):
     def __init__(self, size):
         super().__init__(size)
         self.group_leader = {}
@@ -32,7 +32,7 @@ if __name__ == '__main__':
     N = 10
     cuf = CanonicalUnionFind(N)
 
-    for t, a, b in UnionFind.random_time_union_generator(N, N):
+    for t, a, b in union_find.random_time_union_generator(N, N):
         cuf.union(a, b)
 
     print(' 0  1  2  3  4  5  6  7  8  9')

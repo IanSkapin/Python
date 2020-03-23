@@ -1,11 +1,9 @@
 
-
-
 from collections import Counter
 from math import factorial
 
 
-def sherlockAndAnagrams(s):
+def find_all_the_anagrams(s):
     count = []
     # first we go through all the possible substrings strings
     # i - represents the size of the string and
@@ -19,17 +17,3 @@ def sherlockAndAnagrams(s):
     return sum(count)
 
 
-def find_anagrams(s):
-    count = []
-    for i in range(1, len(s) + 1):
-        a = []
-        for j in range(len(s) - i + 1):
-            srtd = "".join(sorted(s[j: j + i]))
-            a.append(srtd)
-        b = Counter(a)
-        llcmb = []
-        for v in b.values():
-            cmb = combinations(['a'] * v, 2)
-            llcmb.append(len(list(cmb)))
-        count.append(sum(llcmb))
-    return sum(count)

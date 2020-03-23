@@ -1,5 +1,5 @@
 import pytest
-from .. import MatrixRotation
+from .. import matrix_rotation
 
 rotations = [
     [
@@ -75,8 +75,8 @@ def get_matrix(i, j):
     (get_matrix(5, 4), 5, 4, [[0, 1, 2, 3, 13, 23, 33, 43, 42, 41, 40, 30, 20, 10], [11, 12, 22, 32, 31, 21]]),
 ])
 def test_transform_to_circles(mat, m, n, reference):
-    ref = [MatrixRotation.deque(a) for a in reference]
-    output = MatrixRotation.transform_to_circles(mat, m, n)
+    ref = [matrix_rotation.deque(a) for a in reference]
+    output = matrix_rotation.transform_to_circles(mat, m, n)
     for r, o in zip(ref, output):
         assert r == o
 
@@ -84,10 +84,9 @@ def test_transform_to_circles(mat, m, n, reference):
 @pytest.mark.parametrize('m, n', [(2, 2), (2, 3), (3, 2), (6, 6), (4, 5), (5, 4)])
 def test_transform_to_matrix(m, n):
     matrix = get_matrix(m, n)
-    reference = MatrixRotation.transform_to_circles(matrix, m, n)
-    for k, (r, o) in enumerate(zip(matrix, MatrixRotation.transform_to_matrix(reference, m, n))):
+    reference = matrix_rotation.transform_to_circles(matrix, m, n)
+    for k, (r, o) in enumerate(zip(matrix, matrix_rotation.transform_to_matrix(reference, m, n))):
         assert r == o, f'in circle {k} for mat({m}, {n})'
-
 
 
 @pytest.mark.parametrize('matrix, rotation, rotated_matrix', [
@@ -102,8 +101,7 @@ def test_transform_to_matrix(m, n):
     (rotations[1], 1, rotations[2]),
     (rotations[0], 7, rotations[7]),
     (rotations[7], -7, rotations[0]),
-
 ])
 def test_matrix_rotation(matrix, rotation, rotated_matrix):
-    assert rotated_matrix == MatrixRotation.matrixRotation(matrix, rotation)
+    assert rotated_matrix == matrix_rotation.matrixRotation(matrix, rotation)
 
